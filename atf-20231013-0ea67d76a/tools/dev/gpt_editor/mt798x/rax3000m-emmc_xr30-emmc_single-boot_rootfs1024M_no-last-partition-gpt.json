@@ -29,7 +29,7 @@
 
 	"rootfs" : {
 		"start": 82944,
-		"end" : 2130943,
+		"end" : 2180095,
 		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
 		"unique_part_guid" : "{309a3e76-270b-41b2-b5d5-ed8154e7542b}"
 	}
