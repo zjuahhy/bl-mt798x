@@ -20,7 +20,7 @@
 						document.getElementById('title').innerHTML = 'BOOT SUCCESS'
 						document.getElementById('info').innerHTML = 'Your device was successfully booted into initramfs!'
 					},
-					timeout: 30000
+					timeout: 60000
 				})
 
 				ajax('/result', function(response) {
@@ -31,7 +31,7 @@
 
 					document.getElementById('title').innerHTML = 'BOOT SUCCESS'
 					document.getElementById('info').innerHTML = 'Your device was successfully booted into initramfs!'
-				}, 30000)
+				}, 60000)
 			}
 		</script>
 	</head>
