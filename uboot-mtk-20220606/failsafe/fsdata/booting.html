@@ -13,25 +13,15 @@
 					url: '/result',
 					done: function(response) {
 						if (response == 'failed') {
-							location = '/fail.html'
-							return
+							location = '/fail.html';
+							return;
 						}
 
-						document.getElementById('title').innerHTML = 'BOOT SUCCESS'
-						document.getElementById('info').innerHTML = 'Your device was successfully booted into initramfs!'
+						document.getElementById('title').innerHTML = 'BOOT SUCCESS';
+						document.getElementById('info').innerHTML = 'Your device was successfully booted into initramfs!';
 					},
 					timeout: 60000
-				})
-
-				ajax('/result', function(response) {
-					if (response == 'failed') {
-						location = '/fail.html'
-						return
-					}
-
-					document.getElementById('title').innerHTML = 'BOOT SUCCESS'
-					document.getElementById('info').innerHTML = 'Your device was successfully booted into initramfs!'
-				}, 60000)
+				});
 			}
 		</script>
 	</head>

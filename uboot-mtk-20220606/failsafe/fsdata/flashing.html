@@ -7,31 +7,21 @@
 		<script src="/index.js"></script>
 		<script>
 			function init() {
-				getversion()
+				getversion();
 
 				ajax({
 					url: '/result',
 					done: function(response) {
 						if (response == 'failed') {
-							location = '/fail.html'
-							return
+							location = '/fail.html';
+							return;
 						}
 
-						document.getElementById('title').innerHTML = 'UPDATE COMPLETED'
-						document.getElementById('info').innerHTML = 'Your device was successfully updated! Now rebooting...'
+						document.getElementById('title').innerHTML = 'UPDATE COMPLETED';
+						document.getElementById('info').innerHTML = 'Your device was successfully updated! Now rebooting...';
 					},
 					timeout: 60000
-				})
-
-				ajax('/result', function(response) {
-					if (response == 'failed') {
-						location = '/fail.html'
-						return
-					}
-
-					document.getElementById('title').innerHTML = 'UPDATE COMPLETED'
-					document.getElementById('info').innerHTML = 'Your device was successfully updated! Now rebooting...'
-				}, 60000)
+				});
 			}
 		</script>
 	</head>
@@ -44,6 +34,6 @@
 			</p>
 			<div id="l"></div>
 		</div>
-        <div id="version"></div>
+		<div id="version"></div>
 	</body>
 </html>
