@@ -18,6 +18,7 @@
 #include <linux/stringify.h>
 #include <dm/ofnode.h>
 #include <version_string.h>
+#include <linux/delay.h>
 
 #include "../board/mediatek/common/boot_helper.h"
 #include "fs.h"
@@ -82,7 +83,7 @@ static int write_firmware_failsafe(size_t data_addr, uint32_t data_size)
 {
 	int r;
 
-	led_control("ledblink", "blink_led", "100");
+	led_control("ledblink", "system_led", "100");
 
 	switch (fw_type) {
 #if defined(CONFIG_MT7981_BOOTMENU_EMMC) || defined(CONFIG_MT7986_BOOTMENU_EMMC)
@@ -106,7 +107,8 @@ static int write_firmware_failsafe(size_t data_addr, uint32_t data_size)
 		break;
 	}
 
-	led_control("ledblink", "blink_led", "0");
+	led_control("ledblink", "system_led", "0");
+	led_control("led", "system_led", "on");
 
 	return r;
 }
@@ -397,8 +399,8 @@ static void result_handler(enum httpd_uri_handler_status status,
 		/* invalidate upload identifier */
 		upload_data_id = rand();
 
-		led_control("led", "blink_led", "on");
-		led_control("led", "system_led", "off");
+		led_control("led", "blink_led", "off");
+		led_control("led", "system_led", "on");
 
 		if (!st->ret)
 			response->data = "success";
@@ -486,6 +488,7 @@ static int do_httpd(struct cmd_tbl *cmdtp, int flag, int argc,
 {
 	u32 local_ip;
 	int ret;
+	const char *led = ofnode_conf_read_str("success_led");
 
 #ifdef CONFIG_NET_FORCE_IPADDR
 	net_ip = string_to_ip(__stringify(CONFIG_IPADDR));
@@ -499,13 +502,28 @@ static int do_httpd(struct cmd_tbl *cmdtp, int flag, int argc,
 	       (local_ip >> 8) & 0xff, local_ip & 0xff);
 	printf("\nPress Ctrl+C to exit\n");
 
+	led_control("led", "blink_led", "off");
+	led_control("led", "system_led", "on");
+
 	ret = start_web_failsafe();
 
 	if (upgrade_success) {
+		if (!led){
+			led_control("led", "blink_led", "on");
+			led_control("led", "system_led", "on");
+		} else {
+			led_control("led", "system_led", "off");
+			led_control("led", "success_led", "on");
+		}
+		mdelay(3000);
+
 		if (fw_type == FW_TYPE_INITRD)
 			boot_from_mem((ulong)upload_data);
 		else
 			do_reset(NULL, 0, 0, NULL);
+	} else {
+		led_control("led", "system_led", "off");
+		led_control("led", "blink_led", "on");
 	}
 
 	return ret;
