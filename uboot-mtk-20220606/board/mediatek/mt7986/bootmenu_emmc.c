@@ -158,6 +158,13 @@ int write_firmware(void *priv, const struct data_part_entry *dpe,
 				   (~(ROOTDEV_OVERLAY_ALIGN - 1));
 		erase_part(PART_PRODUCTION_NAME, rootfs_data_offs, SZ_512K);
 
+		ret = env_set_ulong("dual_boot.current_slot", 1);//0 for closed, 1 for mainline
+		if (ret)
+			printf("Failed to set current slot in env\n");
+		ret = env_save();
+		if (ret)
+			printf("Failed to save env\n");
+
 		return ret;
 	}
 
@@ -189,6 +196,13 @@ int write_firmware(void *priv, const struct data_part_entry *dpe,
 	ret = write_part(kernel_part, kernel_data, kernel_size, true);
 	if (ret)
 		return ret;
+
+	ret = env_set_ulong("dual_boot.current_slot", 0);//0 for closed, 1 for mainline
+	if (ret)
+		printf("Failed to set current slot in env\n");
+	ret = env_save();
+	if (ret)
+		printf("Failed to save env\n");
 
 #ifdef CONFIG_MTK_DUAL_BOOT
 	ret = dual_boot_set_current_slot(slot);
@@ -290,10 +304,24 @@ int board_boot_default(void)
 	return dual_boot_mmc(&mbd);
 #else
 	int ret;
+	char *end, *slot_str = env_get("dual_boot.current_slot");
+	u32 slot;
 
-	ret = boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_KERNEL_NAME);
-	if (ret == -ENODEV)
-		return boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_PRODUCTION_NAME);
+	if (!slot_str)
+		slot = 0;
+	else {
+		slot = simple_strtoul(slot_str, &end, 10);
+		if (end == slot_str || *end) {
+			printf("Invalid image slot number '%s', default to 0\n", slot_str);
+			slot = 0;
+		}
+	}
+	printf("Current image slot number: %u\n", slot);
+
+	if (slot == 0)//0 for closed, 1 for mainline
+		ret = boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_KERNEL_NAME);
+	else
+		ret = boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_PRODUCTION_NAME);
 
 	return ret;
 #endif /* CONFIG_MTK_DUAL_BOOT */

@@ -22,15 +22,43 @@
 
 	"kernel" : {
 		"start": 17408,
-		"end" : 82943,
+		"end" : 50175,
 		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
 		"unique_part_guid" : "{971f7556-ef1a-44cd-8b28-0cf8100b9c7e}"
 	},
 
 	"rootfs" : {
-		"start": 82944,
-		"end" : 2180095,
+		"start": 50176,
+		"end" : 1098751,
 		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
 		"unique_part_guid" : "{309a3e76-270b-41b2-b5d5-ed8154e7542b}"
+	},
+
+	"production" : {
+		"start": 1098752,
+		"end" : 2147327,
+		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
+		"unique_part_guid" : "{dd18c072-adb3-412b-bf97-37617b01adf3}"
+	},
+
+	"log" : {
+		"start": 2147328,
+		"end" : 2281471,
+		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
+		"unique_part_guid" : "{2d18c070-adb6-412b-bf90-37617b01adf5}"
+	},
+
+	"plugin" : {
+		"start": 2281472,
+		"end" : 4378623,
+		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
+		"unique_part_guid" : "{3d18c075-adb0-412b-bf92-37617b01adf6}"
+	},
+
+	"swap" : {
+		"start": 4378624,
+		"end" : 6475775,
+		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
+		"unique_part_guid" : "{4d18c079-adb2-412b-bf93-37617b01adf7}"
 	}
 }
