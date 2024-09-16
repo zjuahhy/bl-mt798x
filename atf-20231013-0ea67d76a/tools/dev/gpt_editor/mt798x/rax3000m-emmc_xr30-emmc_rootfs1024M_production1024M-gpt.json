@@ -37,7 +37,7 @@
 	"production" : {
 		"start": 2180096,
 		"end" : 4277247,
-		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
-		"unique_part_guid" : "{f19609c8-f7d3-4ac6-b93e-7fd9fad4b4af}"
+		"part_type_guid" : "{cae9be83-b15f-49cc-863f-081b744a2d93}",
+		"unique_part_guid" : "{5452574f-2211-4433-5566-778899aabb05}"
 	}
 }
