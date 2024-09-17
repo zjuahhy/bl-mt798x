@@ -18,10 +18,16 @@ static int do_mtkboardboot(struct cmd_tbl *cmdtp, int flag, int argc,
 	int ret = CMD_RET_SUCCESS;
 
 	ret = board_boot_default();
+	if (ret) {
+		printf("\nBoot firmware failed! Try one more time...\n\n");
+		ret = board_boot_default();
+	}
+		
 	if (ret)
 		ret = CMD_RET_FAILURE;
 
 	if (IS_ENABLED(CONFIG_WEBUI_FAILSAFE_ON_AUTOBOOT_FAIL))
+		printf("\nBoot firmware failed!\n");
 		run_command("httpd", 0);
 
 	return ret;
