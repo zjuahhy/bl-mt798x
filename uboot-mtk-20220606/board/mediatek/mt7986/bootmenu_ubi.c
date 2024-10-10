@@ -62,7 +62,7 @@ int write_firmware(void *priv, const struct data_part_entry *dpe,
 	return -ENOTSUPP;
 }
 
-static int write_flash_image(void *priv, const struct data_part_entry *dpe,
+int write_flash_image(void *priv, const struct data_part_entry *dpe,
 			     const void *data, size_t size)
 {
 	struct mtd_info *mtd;
