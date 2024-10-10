@@ -76,7 +76,7 @@ make -C "$ATF_DIR" -f makefile all CONFIG_CROSS_COMPILER="${TOOLCHAIN}"
 
 mkdir -p "output"
 if [ -f "$ATF_DIR/build/${SOC}/release/fip.bin" ]; then
-	FIP_NAME="${SOC}_${BOARD}-fip"
+	FIP_NAME="${SOC}_${BOARD}-fip-debrick-only"
 	if [ "$fixedparts" = "1" ]; then
 		FIP_NAME="${FIP_NAME}-fixed-parts"
 	fi

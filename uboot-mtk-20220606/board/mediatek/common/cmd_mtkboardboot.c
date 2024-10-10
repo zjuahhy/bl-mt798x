@@ -17,13 +17,15 @@ static int do_mtkboardboot(struct cmd_tbl *cmdtp, int flag, int argc,
 {
 	int ret = CMD_RET_SUCCESS;
 
-	ret = board_boot_default();
+	/*ret = board_boot_default();
 	if (ret)
 		ret = CMD_RET_FAILURE;
 
 	if (IS_ENABLED(CONFIG_WEBUI_FAILSAFE_ON_AUTOBOOT_FAIL))
-		run_command("httpd", 0);
-
+		run_command("httpd", 0);*/
+	ret = CMD_RET_FAILURE;
+	printf("\nWARNINGS: This Uboot is for mtk_uartboot debrick only! Do not use in normal device!\n");
+	run_command("httpd", 0);
 	return ret;
 }
 
