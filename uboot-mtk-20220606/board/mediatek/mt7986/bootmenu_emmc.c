@@ -219,7 +219,7 @@ int write_gpt(void *priv, const struct data_part_entry *dpe,
 	return mmc_write_gpt(EMMC_DEV_INDEX, 0, GPT_MAX_SIZE, data, size);
 }
 
-static int write_flash_image(void *priv, const struct data_part_entry *dpe,
+int write_flash_image(void *priv, const struct data_part_entry *dpe,
 			     const void *data, size_t size)
 {
 	return mmc_write_generic(EMMC_DEV_INDEX, 0, 0, 0, data, size, true);

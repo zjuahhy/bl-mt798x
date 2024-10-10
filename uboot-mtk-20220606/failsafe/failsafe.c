@@ -30,7 +30,8 @@ enum {
 	FW_TYPE_BL2,
 	FW_TYPE_FIP,
 	FW_TYPE_FW,
-	FW_TYPE_INITRD
+	FW_TYPE_INITRD,
+	FW_TYPE_SIMG
 };
 
 typedef struct fip_toc_header {
@@ -66,6 +67,9 @@ int write_bl2(void *priv, const struct data_part_entry *dpe,
 int write_fip(void *priv, const struct data_part_entry *dpe,
 		     const void *data, size_t size);
 
+int write_flash_image(void *priv, const struct data_part_entry *dpe,
+			     const void *data, size_t size);
+
 int write_firmware(void *priv, const struct data_part_entry *dpe,
 			  const void *data, size_t size);
 
@@ -100,6 +104,10 @@ static int write_firmware_failsafe(size_t data_addr, uint32_t data_size)
 		if (!verify_fip((const void *)data_addr, data_size))
 			return -1;
 		r = write_fip(NULL, NULL, (const void *)data_addr, data_size);
+		break;
+
+	case FW_TYPE_SIMG:
+		r = write_flash_image(NULL, NULL, (const void *)data_addr, data_size);
 		break;
 
 	default:
@@ -288,6 +296,12 @@ static void upload_handler(enum httpd_uri_handler_status status,
 		goto done;
 	}
 
+	fw = httpd_request_find_value(request, "simg");
+	if (fw) {
+		fw_type = FW_TYPE_SIMG;
+		goto done;
+	}
+
 	fw = httpd_request_find_value(request, "firmware");
 	if (fw) {
 		fw_type = FW_TYPE_FW;
@@ -472,6 +486,7 @@ int start_web_failsafe(void)
 	httpd_register_uri_handler(inst, "/index.js", &js_handler, NULL);
 	httpd_register_uri_handler(inst, "/initramfs.html", &html_handler, NULL);
 	httpd_register_uri_handler(inst, "/result", &result_handler, NULL);
+	httpd_register_uri_handler(inst, "/simg.html", &html_handler, NULL);
 	httpd_register_uri_handler(inst, "/style.css", &style_handler, NULL);
 	httpd_register_uri_handler(inst, "/uboot.html", &html_handler, NULL);
 	httpd_register_uri_handler(inst, "/upload", &upload_handler, NULL);
