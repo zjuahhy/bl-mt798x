@@ -306,6 +306,7 @@ int board_boot_default(void)
 	int ret;
 	char *end, *slot_str = env_get("dual_boot.current_slot");
 	u32 slot;
+	const char *model= fdt_getprop(gd->fdt_blob, 0, "model", NULL);
 
 	if (!slot_str)
 		slot = 0;
@@ -318,10 +319,42 @@ int board_boot_default(void)
 	}
 	printf("Current image slot number: %u\n", slot);
 
-	if (slot == 0)//0 for closed, 1 for mainline
+	if (slot == 0) {//0 for closed, 1 for mainline
+		if (strcmp(model, "mt7981-cmcc_rax3000m-emmc") == 0 || strcmp(model, "mt7981-cmcc_xr30-emmc") == 0) {
+			//delete bootconf in env for closed
+			ret = env_set("bootconf", "");
+			if (ret)
+				printf("Failed to set bootconf in env\n");
+			ret = env_save();
+			if (ret)
+				printf("Failed to save env\n");
+		}
+		printf("bootconf=%s\n", env_get("bootconf"));
 		ret = boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_KERNEL_NAME);
-	else
+	}
+	else {
+		if (strcmp(model, "mt7981-cmcc_rax3000m-emmc") == 0) {
+			//config-1#mt7981b-cmcc-rax3000m-emmc for mainline
+			ret = env_set("bootconf", "config-1#mt7981b-cmcc-rax3000m-emmc");
+			if (ret)
+				printf("Failed to set bootconf in env\n");
+			ret = env_save();
+			if (ret)
+				printf("Failed to save env\n");
+		}
+		else if (strcmp(model, "mt7981-cmcc_xr30-emmc") == 0) {
+			//主线未支持XR30和XR30-eMMC，所以用RAX3000M-eMMC代替
+			//config-1#mt7981b-cmcc-xr30-emmc for mainline
+			ret = env_set("bootconf", "config-1#mt7981b-cmcc-rax3000m-emmc");
+			if (ret)
+				printf("Failed to set bootconf in env\n");
+			ret = env_save();
+			if (ret)
+				printf("Failed to save env\n");
+		}
+		printf("bootconf=%s\n", env_get("bootconf"));
 		ret = boot_from_mmc_partition(EMMC_DEV_INDEX, 0, PART_PRODUCTION_NAME);
+	}
 
 	return ret;
 #endif /* CONFIG_MTK_DUAL_BOOT */
