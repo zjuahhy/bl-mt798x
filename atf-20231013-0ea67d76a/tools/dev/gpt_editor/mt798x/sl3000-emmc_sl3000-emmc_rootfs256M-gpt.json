@@ -32,5 +32,12 @@
 		"end" : 607231,
 		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
 		"unique_part_guid" : "{309a3e76-270b-41b2-b5d5-ed8154e7542b}"
+	},
+
+	"storage" : {
+		"start": 607232,
+		"end" : 239599582,
+		"part_type_guid" : "{0fc63daf-8483-4772-8e79-3d69d8477de4}",
+		"unique_part_guid" : "{5d18c072-adb3-412b-bf95-37617b01adf8}"
 	}
 }
